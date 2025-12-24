@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Stay focused with Pomodoro timer - 25 minute work sessions">
     <meta name="theme-color" content="#6bb6a3">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -73,22 +73,6 @@
                 <button class="timer-tab" data-mode="long" data-minutes="15">Long Break</button>
             </div>
 
-            <div class="timer-slider-container">
-                <label for="timerSlider">
-                    <span>Custom Timer:</span>
-                    <span id="sliderValue">25</span>
-                    <span>min</span>
-                </label>
-                <input type="range" id="timerSlider" min="1" max="60" value="25" class="timer-slider">
-                <div class="slider-marks">
-                    <span>1min</span>
-                    <span>15min</span>
-                    <span>30min</span>
-                    <span>45min</span>
-                    <span>60min</span>
-                </div>
-            </div>
-
             <div class="timer-controls">
                 <button class="control-btn" id="resetBtn">Reset</button>
                 <button class="control-btn" id="skipBtn">Skip</button>
@@ -100,15 +84,15 @@
         </div>
 
         <nav class="global-bottom-nav">
-            <a href="habit-tracker.html" class="global-nav-btn">
+            <a href="/habit-tracker" class="global-nav-btn">
                 <span class="nav-icon">📊</span>
                 <span>Habits</span>
             </a>
-            <a href="pomodoro.html" class="global-nav-btn active">
+            <a href="/pomodoro" class="global-nav-btn active">
                 <span class="nav-icon">⏱️</span>
                 <span>Pomodoro</span>
             </a>
-            <a href="task-manager.html" class="global-nav-btn">
+            <a href="/task-manager" class="global-nav-btn">
                 <span class="nav-icon">✓</span>
                 <span>Tasks</span>
             </a>
@@ -151,17 +135,8 @@
     </div>
 
     <script src="/js/loading.js"></script>
+    <script src="/js/pomodoro.js"></script>
     <script>
-        // Wait for Capacitor to be ready before loading app
-        document.addEventListener('DOMContentLoaded', () => {
-            // Give Capacitor time to initialize
-            setTimeout(() => {
-                const script = document.createElement('script');
-                script.src = '/js/pomodoro.js';
-                document.body.appendChild(script);
-            }, 100);
-        });
-        
         // Register Service Worker for PWA (only on web, not native app)
         const isNativeCapacitor = (
             (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform()) ||

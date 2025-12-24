@@ -1,0 +1,189 @@
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loading-logo {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    animation: fadeInScale 0.8s ease-out;
+}
+
+.loading-logo .highlight {
+    color: #a855f7;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.loading-spinner-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4px solid rgba(168, 85, 247, 0.2);
+    border-top-color: #a855f7;
+    animation: spin 1s linear infinite;
+}
+
+.loading-text {
+    color: #999;
+    font-size: 1rem;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Loading dots animation */
+.loading-dots {
+    display: inline-flex;
+    gap: 0.3rem;
+    margin-left: 0.3rem;
+}
+
+.loading-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #a855f7;
+    animation: dotPulse 1.4s ease-in-out infinite;
+}
+
+.loading-dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.loading-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+/* Theme-specific loading screens */
+body.theme-light .loading-screen {
+    background: #fff;
+}
+
+body.theme-light .loading-text {
+    color: #666;
+}
+
+body.theme-light .loading-spinner-circle {
+    border-color: rgba(168, 85, 247, 0.2);
+    border-top-color: #a855f7;
+}
+
+body.theme-catppuccin .loading-screen {
+    background: #1e1e2e;
+}
+
+body.theme-catppuccin .loading-logo .highlight {
+    color: #cba6f7;
+}
+
+body.theme-catppuccin .loading-spinner-circle {
+    border-color: rgba(203, 166, 247, 0.2);
+    border-top-color: #cba6f7;
+}
+
+body.theme-catppuccin .loading-dot {
+    background: #cba6f7;
+}
+
+/* Pomodoro theme loading */
+body.pomodoro-theme .loading-screen {
+    background: linear-gradient(135deg, #6bb6a3 0%, #5a9d8c 100%);
+}
+
+body.pomodoro-theme .loading-logo,
+body.pomodoro-theme .loading-text {
+    color: #fff;
+}
+
+body.pomodoro-theme .loading-logo .highlight {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.pomodoro-theme .loading-spinner-circle {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-top-color: #fff;
+}
+
+body.pomodoro-theme .loading-dot {
+    background: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .loading-logo {
+        font-size: 2.5rem;
+    }
+    
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .loading-text {
+        font-size: 0.9rem;
+    }
+}

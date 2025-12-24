@@ -1,0 +1,23 @@
+<!-- Add this meta tag to all HTML files for Android viewport fix -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<style>
+/* Android-specific navigation fix */
+@supports (-webkit-touch-callout: none) {
+  .global-bottom-nav {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 1.5rem) !important;
+  }
+}
+
+/* Ensure bottom nav is above everything */
+.global-bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
+}
+
+.global-nav-btn {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+}
+</style>

@@ -16,31 +16,11 @@ let settings = JSON.parse(localStorage.getItem('pomodoroSettings')) || {
     soundEnabled: true
 };
 
-// Request notification permissions on app start
-async function requestNotificationPermissions() {
-    try {
-        if (typeof Capacitor !== 'undefined' && Capacitor.Plugins && Capacitor.Plugins.LocalNotifications) {
-            const LocalNotifications = Capacitor.Plugins.LocalNotifications;
-            const permission = await LocalNotifications.requestPermissions();
-            console.log('Notification permission requested:', permission);
-            return permission.display === 'granted';
-        }
-    } catch (error) {
-        console.error('Error requesting notification permissions:', error);
-    }
-    return false;
-}
-
 // Initialize
 function initPomodoro() {
-   // Guard: prevent double-init if script is loaded twice
-   if (window.__habitkitPomodoroInitialized) return;
-   window.__habitkitPomodoroInitialized = true;
+    if (window.__habitkitPomodoroInitialized) return;
+    window.__habitkitPomodoroInitialized = true;
 
-    // Request notification permissions on startup
-    setTimeout(() => {
-        requestNotificationPermissions();
-    }, 1000);
     // Check if timer was running when page loaded
     const wasRunning = localStorage.getItem('pomodoroRunning') === 'true';
     const savedEndTime = parseInt(localStorage.getItem('pomodoroEndTime'));
@@ -76,7 +56,6 @@ function initPomodoro() {
     applyThemeForMode(currentMode);
 }
 
-// Run init whether loaded before or after DOMContentLoaded (important for Capacitor dynamic script injection)
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initPomodoro);
 } else {
@@ -215,28 +194,20 @@ async function timerComplete() {
     
     // Show notification - Use Capacitor for native notifications
     try {
-        console.log('Attempting to show notification...');
-        console.log('Capacitor available?', typeof Capacitor !== 'undefined');
-        
         // Always try Capacitor in Android app
         if (typeof Capacitor !== 'undefined' && Capacitor.Plugins && Capacitor.Plugins.LocalNotifications) {
             const LocalNotifications = Capacitor.Plugins.LocalNotifications;
-            console.log('LocalNotifications plugin found!');
             
             // Request permission first time
             const permission = await LocalNotifications.requestPermissions();
-            console.log('Permission status:', permission);
             
             if (permission.display === 'granted') {
-                const notificationId = Math.floor(Math.random() * 100000);
-                console.log('Scheduling notification with ID:', notificationId);
-                
                 await LocalNotifications.schedule({
                     notifications: [
                         {
                             title: 'HabitKit Pomodoro',
                             body: currentMode === 'pomodoro' ? '⏰ Time for a break!' : '💪 Break is over! Ready to focus?',
-                            id: notificationId,
+                            id: Math.floor(Math.random() * 100000),
                             schedule: { at: new Date(Date.now() + 100) },
                             sound: 'default',
                             actionTypeId: '',
@@ -244,17 +215,11 @@ async function timerComplete() {
                         }
                     ]
                 });
-                console.log('✅ Notification scheduled successfully!');
+                console.log('Notification scheduled!');
             } else {
-                console.log('❌ Notification permission denied:', permission.display);
-                alert('Please enable notifications for HabitKit in phone settings!');
+                console.log('Notification permission denied');
             }
         } else {
-            console.log('Capacitor or LocalNotifications not available');
-            console.log('Capacitor:', typeof Capacitor);
-            if (typeof Capacitor !== 'undefined') {
-                console.log('Capacitor.Plugins:', Capacitor.Plugins);
-            }
             // Fallback to browser notification for web
             if ('Notification' in window && Notification.permission === 'granted') {
                 new Notification('Pomodoro Timer', {
