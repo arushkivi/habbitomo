@@ -1,0 +1,281 @@
+/* Pomodoro Specific Styles */
+.pomodoro-theme {
+    background: linear-gradient(135deg, #6bb6a3 0%, #5a9d8c 100%);
+    color: #fff;
+}
+
+.pomodoro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    min-height: calc(100vh - 80px);
+}
+
+.timer-display {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 2rem 0;
+}
+
+.timer-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.timer-ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 12;
+}
+
+.timer-ring-progress {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 12;
+    stroke-dasharray: 817;
+    stroke-dashoffset: 0;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s linear;
+}
+
+.timer-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.play-btn {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    color: #6bb6a3;
+    font-size: 2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.play-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.play-btn:active {
+    transform: scale(0.95);
+}
+
+.play-btn svg {
+    width: 40px;
+    height: 40px;
+}
+
+.timer-text {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.timer-text h2 {
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+}
+
+.timer-text p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    letter-spacing: 2px;
+}
+
+.timer-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem;
+    border-radius: 15px;
+}
+
+.timer-tab {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.timer-tab.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.timer-tab:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.timer-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.control-btn {
+    padding: 0.75rem 2rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.session-counter {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    min-width: 250px;
+}
+
+.session-counter p {
+    font-size: 1rem;
+}
+
+.session-counter span {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* Timer running state */
+.timer-running .play-btn {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* Break mode colors */
+.pomodoro-theme.short-break {
+    background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+}
+
+.pomodoro-theme.long-break {
+    background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%);
+}
+
+.short-break .play-btn {
+    color: #60a5fa;
+}
+
+.long-break .play-btn {
+    color: #a855f7;
+}
+
+/* Pomodoro bottom navigation inherits from theme, not pomodoro colors */
+/* This makes it consistent with the theme across all pages */
+
+/* Pulsing animation for timer */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.timer-running .timer-ring-progress {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Settings modal overrides for pomodoro */
+.pomodoro-theme .modal-content {
+    background: #fff;
+    color: #333;
+}
+
+.pomodoro-theme .modal-body input,
+.pomodoro-theme .modal-body select {
+    background: #f5f5f5;
+    color: #333;
+    border-color: #ddd;
+}
+
+.pomodoro-theme .close-btn {
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .pomodoro-container {
+        padding: 1rem 0.5rem;
+    }
+    
+    .timer-display {
+        width: 250px;
+        height: 250px;
+        margin: 1.5rem 0;
+    }
+    
+    .timer-text h2 {
+        font-size: 2.5rem;
+    }
+    
+    .timer-text {
+        margin-bottom: 1.5rem;
+    }
+    
+    .timer-tabs {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+        gap: 0.5rem;
+    }
+    
+    .timer-tab {
+        width: 100%;
+        padding: 0.75rem;
+        justify-content: center;
+    }
+    
+    .timer-controls {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+        gap: 0.5rem;
+    }
+    
+    .control-btn {
+        width: 100%;
+        padding: 0.75rem;
+    }
+    
+    .session-counter {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .play-btn {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .play-btn svg {
+        width: 36px;
+        height: 36px;
+    }
+}

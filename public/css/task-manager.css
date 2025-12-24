@@ -1,0 +1,295 @@
+/* Task Manager Specific Styles */
+.task-filters {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-btn {
+    padding: 0.5rem 1.5rem;
+    background: #1a1a1a;
+    border: none;
+    border-radius: 20px;
+    color: #999;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn.active {
+    background: #a855f7;
+    color: #fff;
+}
+
+.filter-btn:hover {
+    background: #2a2a2a;
+}
+
+.task-input-container {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.task-input-container input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.task-input-container button {
+    width: 45px;
+    height: 45px;
+    background: #a855f7;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.task-input-container button:hover {
+    background: #9333ea;
+}
+
+.tasks-container {
+    padding: 0 1rem 2rem 1rem;
+}
+
+.task-item {
+    background: #1a1a1a;
+    border-radius: 15px;
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 4px solid transparent;
+}
+
+.task-item:hover {
+    background: #222;
+    transform: translateX(5px);
+}
+
+.task-item.completed {
+    opacity: 0.6;
+}
+
+.task-item.completed .task-content h3,
+.task-item.completed .task-content p {
+    text-decoration: line-through;
+}
+
+/* Priority colors */
+.task-item[data-priority="high"] {
+    border-left-color: #ef4444;
+}
+
+.task-item[data-priority="medium"] {
+    border-left-color: #f59e0b;
+}
+
+.task-item[data-priority="low"] {
+    border-left-color: #22c55e;
+}
+
+.task-checkbox {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border: 2px solid #666;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    margin-top: 0.25rem;
+}
+
+.task-checkbox:hover {
+    border-color: #a855f7;
+}
+
+.task-checkbox.checked {
+    background: #a855f7;
+    border-color: #a855f7;
+}
+
+.task-checkbox.checked::after {
+    content: '✓';
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+.task-content {
+    flex: 1;
+}
+
+.task-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: #fff;
+}
+
+.task-content p {
+    color: #999;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.task-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.task-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(168, 85, 247, 0.2);
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: #a855f7;
+}
+
+.task-due {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.task-due.overdue {
+    color: #ef4444;
+}
+
+.task-due.today {
+    color: #f59e0b;
+}
+
+.task-priority-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 0.5rem;
+}
+
+.task-actions {
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.task-item:hover .task-actions {
+    opacity: 1;
+}
+
+.task-action-btn {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.task-action-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.task-action-btn.delete:hover {
+    background: #ef4444;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Task categories */
+.task-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(59, 130, 246, 0.2);
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: #3b82f6;
+}
+
+.task-category[data-category="work"] {
+    background: rgba(168, 85, 247, 0.2);
+    color: #a855f7;
+}
+
+.task-category[data-category="personal"] {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+}
+
+.task-category[data-category="shopping"] {
+    background: rgba(249, 115, 22, 0.2);
+    color: #f97316;
+}
+
+.task-category[data-category="health"] {
+    background: rgba(236, 72, 153, 0.2);
+    color: #ec4899;
+}
+
+/* Stats section */
+.task-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding: 0 1rem 1.5rem 1rem;
+}
+
+.stat-card {
+    background: #1a1a1a;
+    padding: 1rem;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #a855f7;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.stat-card .stat-label {
+    font-size: 0.8rem;
+    color: #999;
+}

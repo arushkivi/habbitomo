@@ -1,0 +1,21 @@
+{
+  "appId": "com.habitkit.app",
+  "appName": "HabitKit",
+  "webDir": "public",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#000000",
+      "androidSplashResourceName": "splash",
+      "iosSplashResourceName": "Default"
+    },
+    "StatusBar": {
+      "style": "dark",
+      "backgroundColor": "#000000"
+    }
+  }
+}

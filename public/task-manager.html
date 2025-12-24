@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Organize and manage your tasks with priorities and deadlines">
+    <meta name="theme-color" content="#a855f7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    <title>Task Manager - HabitKit</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/task-manager.css">
+    <link rel="stylesheet" href="/css/themes.css">
+    <link rel="stylesheet" href="/css/loading.css">
+    <script src="/js/theme-switcher.js"></script>
+</head>
+<body class="dark-theme">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">
+            Task<span class="highlight">Manager</span>
+        </div>
+        <div class="loading-spinner">
+            <div class="loading-spinner-circle"></div>
+        </div>
+        <div class="loading-text">
+            Loading
+            <span class="loading-dots">
+                <span class="loading-dot"></span>
+                <span class="loading-dot"></span>
+                <span class="loading-dot"></span>
+            </span>
+        </div>
+    </div>
+    <div class="container">
+        <header class="app-header">
+            <div class="header-left">
+                <button class="icon-btn" id="settingsBtn">⚙️</button>
+            </div>
+            <h1>Task<span class="highlight">Manager</span></h1>
+            <div class="header-actions">
+                <button class="icon-btn" id="filterBtn">🔍</button>
+                <button class="icon-btn" id="addTaskBtn">➕</button>
+            </div>
+        </header>
+
+        <div class="task-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+        </div>
+
+        <div class="task-input-container">
+            <input type="text" id="quickTaskInput" placeholder="Quick add task...">
+            <button id="quickAddBtn">+</button>
+        </div>
+
+        <div id="tasksContainer" class="tasks-container">
+            <!-- Tasks will be rendered here -->
+        </div>
+
+        <nav class="global-bottom-nav">
+            <a href="/habit-tracker" class="global-nav-btn">
+                <span class="nav-icon">📊</span>
+                <span>Habits</span>
+            </a>
+            <a href="/pomodoro" class="global-nav-btn">
+                <span class="nav-icon">⏱️</span>
+                <span>Pomodoro</span>
+            </a>
+            <a href="/task-manager" class="global-nav-btn active">
+                <span class="nav-icon">✓</span>
+                <span>Tasks</span>
+            </a>
+        </nav>
+
+        <!-- Task Modal -->
+        <div id="taskModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close-btn" id="closeTaskModal">✕</button>
+                    <h2 id="taskModalTitle">Add Task</h2>
+                </div>
+                <div class="modal-body">
+                    <label>Task Title</label>
+                    <input type="text" id="taskTitle" placeholder="Enter task title">
+                    
+                    <label>Description</label>
+                    <textarea id="taskDescription" placeholder="Enter task description" rows="3"></textarea>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select id="taskPriority">
+                                <option value="low">🟢 Low</option>
+                                <option value="medium" selected>🟡 Medium</option>
+                                <option value="high">🔴 High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Due Date</label>
+                            <input type="date" id="taskDueDate">
+                        </div>
+                    </div>
+                    
+                    <label>Category</label>
+                    <select id="taskCategory">
+                        <option value="personal">Personal</option>
+                        <option value="work">Work</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="health">Health</option>
+                        <option value="other">Other</option>
+                    </select>
+                    
+                    <button class="save-btn" id="saveTask">Save Task</button>
+                    <button class="delete-btn" id="deleteTask" style="display:none;">Delete Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/loading.js"></script>
+    <script src="/js/task-manager.js"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>

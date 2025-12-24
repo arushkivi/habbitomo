@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Track your daily habits and build streaks with HabitKit">
+    <meta name="theme-color" content="#a855f7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="HabitKit">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    <title>Habit Tracker - HabitKit</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/habit-tracker.css">
+    <link rel="stylesheet" href="/css/themes.css">
+    <link rel="stylesheet" href="/css/loading.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="/js/theme-switcher.js"></script>
+</head>
+<body class="dark-theme">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">
+            Habit<span class="highlight">Kit</span>
+        </div>
+        <div class="loading-spinner">
+            <div class="loading-spinner-circle"></div>
+        </div>
+        <div class="loading-text">
+            Loading
+            <span class="loading-dots">
+                <span class="loading-dot"></span>
+                <span class="loading-dot"></span>
+                <span class="loading-dot"></span>
+            </span>
+        </div>
+    </div>
+    <div class="container">
+        <header class="app-header">
+            <div class="header-left">
+                <button class="icon-btn" id="settingsBtn">⚙️</button>
+            </div>
+            <h1>Habit<span class="highlight">Kit</span></h1>
+            <div class="header-actions">
+                <button class="icon-btn" id="statsBtn">📊</button>
+                <button class="icon-btn" id="addHabitBtn">➕</button>
+            </div>
+        </header>
+
+        <div class="category-tabs">
+            <button class="category-tab active" data-category="all">🏋️ Fitness</button>
+            <button class="category-tab" data-category="study">🎓 Study</button>
+            <button class="category-tab" data-category="social">👥 Social</button>
+            <button class="category-tab" data-category="work">💼 Work</button>
+        </div>
+
+        <div id="habitsContainer" class="habits-container">
+            <!-- Habits will be rendered here -->
+        </div>
+
+        <nav class="global-bottom-nav">
+            <a href="/habit-tracker" class="global-nav-btn active">
+                <span class="nav-icon">📊</span>
+                <span>Habits</span>
+            </a>
+            <a href="/pomodoro" class="global-nav-btn">
+                <span class="nav-icon">⏱️</span>
+                <span>Pomodoro</span>
+            </a>
+            <a href="/task-manager" class="global-nav-btn">
+                <span class="nav-icon">✓</span>
+                <span>Tasks</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" id="closeSettingsModal">✕</button>
+                <h2>Settings</h2>
+            </div>
+            <div class="modal-body">
+                <h3 style="margin-bottom: 1rem;">🎨 Theme</h3>
+                <div class="theme-selector-modal">
+                    <button class="theme-option-btn" data-theme="theme-dark">
+                        <span class="theme-preview dark-preview">🌙</span>
+                        <span>Dark</span>
+                    </button>
+                    <button class="theme-option-btn" data-theme="theme-light">
+                        <span class="theme-preview light-preview">☀️</span>
+                        <span>Light</span>
+                    </button>
+                    <button class="theme-option-btn" data-theme="theme-catppuccin">
+                        <span class="theme-preview catppuccin-preview">🎨</span>
+                        <span>Catppuccin</span>
+                    </button>
+                </div>
+                
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem;">💾 Data Management</h3>
+                
+                <button class="action-btn" id="exportDataBtn">
+                    📤 Export All Data
+                </button>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">
+                    Download a backup of all your habits, tasks, and settings
+                </p>
+                
+                <button class="action-btn" id="importDataBtn" style="margin-top: 1rem;">
+                    📥 Import Data
+                </button>
+                <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">
+                    Restore data from a backup file
+                </p>
+                
+                <button class="action-btn danger-btn" id="clearDataBtn" style="margin-top: 1.5rem;">
+                    🗑️ Clear All Data
+                </button>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">
+                    ⚠️ This will delete all habits, tasks, and settings
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Habit Modal -->
+    <div id="habitModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" id="closeModal">✕</button>
+                <h2 id="modalTitle">Add Habit</h2>
+            </div>
+            <div class="modal-body">
+                <label>Name</label>
+                <input type="text" id="habitName" placeholder="Enter habit name">
+                
+                <label>Description</label>
+                <input type="text" id="habitDesc" placeholder="Enter description">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="habitCategory">
+                            <option value="fitness">🏋️ Fitness</option>
+                            <option value="study">🎓 Study</option>
+                            <option value="social">👥 Social</option>
+                            <option value="work">💼 Work</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <label>Icon</label>
+                <input type="text" id="habitIcon" placeholder="Enter emoji (e.g., 😊, 🏋️, 📚)" maxlength="2" style="font-size: 1.5rem;">
+                
+                <div class="emoji-picker">
+                    <label>Quick Select:</label>
+                    <div class="emoji-grid" id="emojiGrid">
+                        <button type="button" class="emoji-option" data-emoji="📚">📚</button>
+                        <button type="button" class="emoji-option" data-emoji="💪">💪</button>
+                        <button type="button" class="emoji-option" data-emoji="🧘">🧘</button>
+                        <button type="button" class="emoji-option" data-emoji="💧">💧</button>
+                        <button type="button" class="emoji-option" data-emoji="🏃">🏃</button>
+                        <button type="button" class="emoji-option" data-emoji="🎨">🎨</button>
+                        <button type="button" class="emoji-option" data-emoji="🍎">🍎</button>
+                        <button type="button" class="emoji-option" data-emoji="🛏️">🛏️</button>
+                        <button type="button" class="emoji-option" data-emoji="☕">☕</button>
+                        <button type="button" class="emoji-option" data-emoji="🎯">🎯</button>
+                        <button type="button" class="emoji-option" data-emoji="🎵">🎵</button>
+                        <button type="button" class="emoji-option" data-emoji="✍️">✍️</button>
+                        <button type="button" class="emoji-option" data-emoji="🚴">🚴</button>
+                        <button type="button" class="emoji-option" data-emoji="🧠">🧠</button>
+                        <button type="button" class="emoji-option" data-emoji="💊">💊</button>
+                        <button type="button" class="emoji-option" data-emoji="🌱">🌱</button>
+                        <button type="button" class="emoji-option" data-emoji="🎮">🎮</button>
+                        <button type="button" class="emoji-option" data-emoji="📱">📱</button>
+                        <button type="button" class="emoji-option" data-emoji="💻">💻</button>
+                        <button type="button" class="emoji-option" data-emoji="📝">📝</button>
+                        <button type="button" class="emoji-option" data-emoji="🎓">🎓</button>
+                        <button type="button" class="emoji-option" data-emoji="💼">💼</button>
+                        <button type="button" class="emoji-option" data-emoji="🏠">🏠</button>
+                        <button type="button" class="emoji-option" data-emoji="🌟">🌟</button>
+                        <button type="button" class="emoji-option" data-emoji="❤️">❤️</button>
+                        <button type="button" class="emoji-option" data-emoji="🔥">🔥</button>
+                        <button type="button" class="emoji-option" data-emoji="⚡">⚡</button>
+                        <button type="button" class="emoji-option" data-emoji="🌈">🌈</button>
+                        <button type="button" class="emoji-option" data-emoji="🎪">🎪</button>
+                        <button type="button" class="emoji-option" data-emoji="🧹">🧹</button>
+                        <button type="button" class="emoji-option" data-emoji="🍕">🍕</button>
+                        <button type="button" class="emoji-option" data-emoji="🥗">🥗</button>
+                    </div>
+                </div>
+                
+                <label>Color</label>
+                <div class="color-circle-picker">
+                    <button type="button" class="color-circle" data-color="#ef4444" style="background: #ef4444;" title="Red"></button>
+                    <button type="button" class="color-circle" data-color="#f97316" style="background: #f97316;" title="Orange"></button>
+                    <button type="button" class="color-circle" data-color="#eab308" style="background: #eab308;" title="Yellow"></button>
+                    <button type="button" class="color-circle" data-color="#22c55e" style="background: #22c55e;" title="Green"></button>
+                    <button type="button" class="color-circle" data-color="#14b8a6" style="background: #14b8a6;" title="Teal"></button>
+                    <button type="button" class="color-circle" data-color="#3b82f6" style="background: #3b82f6;" title="Blue"></button>
+                    <button type="button" class="color-circle" data-color="#a855f7" style="background: #a855f7;" title="Purple"></button>
+                    <button type="button" class="color-circle" data-color="#ec4899" style="background: #ec4899;" title="Pink"></button>
+                </div>
+                <input type="hidden" id="habitColor" value="#ef4444">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Per Day</label>
+                        <input type="number" id="habitGoal" value="1" min="1">
+                    </div>
+                </div>
+                
+                <button class="save-btn" id="saveHabit">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/loading.js"></script>
+    <script src="/js/habit-tracker.js"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>
