@@ -1,9 +1,12 @@
 {
-  "version": 2,
+  "buildCommand": "echo 'No build needed'",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/server"
-    }
+    { "source": "/", "destination": "/habit-tracker.html" },
+    { "source": "/habit-tracker", "destination": "/habit-tracker.html" },
+    { "source": "/pomodoro", "destination": "/pomodoro.html" },
+    { "source": "/task-manager", "destination": "/task-manager.html" }
   ]
 }
