@@ -1,12 +1,9 @@
 {
-  "buildCommand": "echo 'No build needed'",
-  "outputDirectory": "public",
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "rewrites": [
-    { "source": "/", "destination": "/habit-tracker.html" },
-    { "source": "/habit-tracker", "destination": "/habit-tracker.html" },
-    { "source": "/pomodoro", "destination": "/pomodoro.html" },
-    { "source": "/task-manager", "destination": "/task-manager.html" }
+  "routes": [
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/habit-tracker", "dest": "/habit-tracker.html" },
+    { "src": "/pomodoro", "dest": "/pomodoro.html" },
+    { "src": "/task-manager", "dest": "/task-manager.html" },
+    { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
