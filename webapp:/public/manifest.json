@@ -80,5 +80,12 @@
       "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
     }
   ],
-  "categories": ["productivity", "lifestyle", "utilities"]
+  "categories": ["productivity", "lifestyle", "utilities"],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot1.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    }
+  ]
 }
