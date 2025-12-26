@@ -38,8 +38,46 @@
     padding: 1.25rem;
     margin-bottom: 1rem;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.25s ease, border-color 0.25s ease;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Premium glow when the habit has an active streak */
+.habit-card.streaked {
+    border-color: rgba(255, 215, 0, 0.35);
+    box-shadow:
+        0 0 0 1px rgba(255, 215, 0, 0.18),
+        0 10px 30px rgba(168, 85, 247, 0.18),
+        0 0 22px rgba(255, 215, 0, 0.18);
+    position: relative;
+}
+
+.habit-card.streaked::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 18px;
+    padding: 1px;
+    background: linear-gradient(135deg,
+        rgba(255, 215, 0, 0.85) 0%,
+        rgba(168, 85, 247, 0.75) 45%,
+        rgba(34, 197, 94, 0.65) 100%
+    );
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.9;
+    filter: blur(0.1px);
+    animation: streak-glow 2.2s ease-in-out infinite;
+}
+
+@keyframes streak-glow {
+    0%, 100% { opacity: 0.75; }
+    50% { opacity: 1; }
 }
 
 .habit-card:hover {
@@ -157,6 +195,94 @@
     }
 }
 
+/* Habit Insights (streak + weekly progress + mini calendar) */
+.habit-insights {
+    margin-bottom: 1rem;
+}
+
+.habit-metrics {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+
+.metric-badge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 0.85rem;
+    line-height: 1;
+}
+
+.metric-badge .metric-value {
+    font-weight: 700;
+}
+
+.metric-badge .metric-suffix {
+    opacity: 0.85;
+    font-size: 0.8em;
+}
+
+.weekly-progress {
+    margin-bottom: 0.75rem;
+}
+
+.weekly-progress-bar {
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+
+.weekly-progress-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.85) 0%, rgba(168, 85, 247, 1) 100%);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.mini-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.mini-day {
+    border-radius: 10px;
+    padding: 0.45rem 0;
+    text-align: center;
+    font-size: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.mini-day.completed {
+    background: rgba(34, 197, 94, 0.18);
+    border-color: rgba(34, 197, 94, 0.45);
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.mini-day.missed {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.10);
+    opacity: 0.75;
+}
+
+.mini-day-label {
+    display: inline-block;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
 /* Habit colors are now dynamic using CSS variables */
 /* Each habit card has --habit-color set inline */
 
@@ -243,7 +369,32 @@
 }
 
 .empty-state p {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.empty-state-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.2rem;
+    border-radius: 14px;
+    border: 1px solid rgba(168, 85, 247, 0.55);
+    background: rgba(168, 85, 247, 0.18);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.empty-state-cta:hover {
+    transform: translateY(-1px);
+    background: rgba(168, 85, 247, 0.28);
+    border-color: rgba(168, 85, 247, 0.75);
+}
+
+.empty-state-cta:active {
+    transform: translateY(0px);
 }
 
 /* Minimal Circle Color Picker */

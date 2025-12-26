@@ -3,8 +3,48 @@ let habits = JSON.parse(localStorage.getItem('habits')) || [];
 let currentFilter = 'all';
 let editingHabitId = null;
 
+function ensureFirstTimeExperience() {
+    try {
+        const onboardedKey = 'habitkit-habits-onboarded';
+        const hasOnboarded = localStorage.getItem(onboardedKey) === 'true';
+
+        // Only preload if: not onboarded yet AND there are no habits.
+        if (!hasOnboarded && (!Array.isArray(habits) || habits.length === 0)) {
+            const todayKey = new Date().toISOString().split('T')[0];
+            const demoCompletions = {
+                // Pre-fill a visible streak + weekly progress.
+                [todayKey]: 1,
+                [addDaysToDateKey(todayKey, -1)]: 1,
+                [addDaysToDateKey(todayKey, -2)]: 1,
+                [addDaysToDateKey(todayKey, -3)]: 1,
+                [addDaysToDateKey(todayKey, -5)]: 1
+            };
+
+            const demoHabit = {
+                id: Date.now(),
+                createdAt: new Date().toISOString(),
+                name: 'Practice a skill',
+                description: 'Start small: 10 minutes on the skill you want to improve.',
+                category: 'personal',
+                icon: '🎯',
+                color: '#a855f7',
+                goal: 1,
+                completions: demoCompletions
+            };
+
+            habits = [demoHabit];
+            localStorage.setItem('habits', JSON.stringify(habits));
+            localStorage.setItem(onboardedKey, 'true');
+        }
+    } catch (e) {
+        // If localStorage is unavailable for any reason, fail silently.
+        console.warn('Onboarding init skipped:', e);
+    }
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    ensureFirstTimeExperience();
     renderHabits();
     setupEventListeners();
 });
@@ -234,6 +274,85 @@ function isHabitCompletedToday(habit) {
     return habit.completions && habit.completions[today] >= habit.goal;
 }
 
+function isHabitCompletedOnDate(habit, dateKey) {
+    return Boolean(habit.completions && habit.completions[dateKey] >= habit.goal);
+}
+
+function addDaysToDateKey(dateKey, days) {
+    const date = new Date(dateKey + 'T00:00:00.000Z');
+    date.setUTCDate(date.getUTCDate() + days);
+    return date.toISOString().split('T')[0];
+}
+
+function getHabitStreak(habit, endDateKey = null) {
+    const endKey = endDateKey || new Date().toISOString().split('T')[0];
+
+    // Typical streak: consecutive completed days ending today. If today isn't completed, streak is 0.
+    if (!isHabitCompletedOnDate(habit, endKey)) return 0;
+
+    let streak = 0;
+    let cursor = endKey;
+
+    while (isHabitCompletedOnDate(habit, cursor)) {
+        streak++;
+        cursor = addDaysToDateKey(cursor, -1);
+    }
+
+    return streak;
+}
+
+function getHabitWeeklyProgress(habit, endDateKey = null) {
+    const endKey = endDateKey || new Date().toISOString().split('T')[0];
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+        const key = addDaysToDateKey(endKey, -i);
+        days.push({ dateKey: key, completed: isHabitCompletedOnDate(habit, key) });
+    }
+
+    const completedDays = days.reduce((sum, d) => sum + (d.completed ? 1 : 0), 0);
+    return {
+        days,
+        completedDays,
+        totalDays: 7,
+        percent: Math.round((completedDays / 7) * 100)
+    };
+}
+
+function renderHabitInsights(habit) {
+    const streak = getHabitStreak(habit);
+    const weekly = getHabitWeeklyProgress(habit);
+
+    const calendarDays = weekly.days.map(d => {
+        const dayLabel = new Date(d.dateKey + 'T00:00:00.000Z').toLocaleDateString(undefined, { weekday: 'short' }).slice(0, 2);
+        return `
+            <div class="mini-day ${d.completed ? 'completed' : 'missed'}" title="${d.dateKey}">
+                <span class="mini-day-label">${dayLabel}</span>
+            </div>
+        `;
+    }).join('');
+
+    return `
+        <div class="habit-insights">
+            <div class="habit-metrics">
+                <div class="metric-badge" title="Consecutive completed days ending today">
+                    🔥 <span class="metric-value">${streak}</span><span class="metric-suffix">-day streak</span>
+                </div>
+                <div class="metric-badge" title="Days completed in the last 7 days">
+                    ${weekly.completedDays}/7 days
+                </div>
+            </div>
+            <div class="weekly-progress" aria-label="Weekly progress">
+                <div class="weekly-progress-bar">
+                    <div class="weekly-progress-fill" style="width: ${weekly.percent}%;"></div>
+                </div>
+            </div>
+            <div class="mini-calendar" aria-label="Last 7 days">
+                ${calendarDays}
+            </div>
+        </div>
+    `;
+}
+
 function renderHabits() {
     const container = document.getElementById('habitsContainer');
     
@@ -245,8 +364,9 @@ function renderHabits() {
     if (filteredHabits.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
-                <h3>No habits yet</h3>
-                <p>Click the + button to add your first habit</p>
+                <h3>Welcome</h3>
+                <p>Start by adding one habit related to the skill you want to improve.</p>
+                <button class="empty-state-cta" onclick="openAddModal()">+ Add your first habit</button>
             </div>
         `;
         return;
@@ -254,9 +374,11 @@ function renderHabits() {
     
     container.innerHTML = filteredHabits.map(habit => {
         const isCompleted = isHabitCompletedToday(habit);
+        const streak = getHabitStreak(habit);
+        const streakedClass = streak > 0 ? 'streaked' : '';
         
         return `
-            <div class="habit-card" data-id="${habit.id}" style="--habit-color: ${habit.color}">
+            <div class="habit-card ${streakedClass}" data-id="${habit.id}" style="--habit-color: ${habit.color}">
                 <div class="habit-header">
                     <div class="habit-info">
                         <div class="habit-icon" style="background: ${habit.color}20;">${habit.icon}</div>
@@ -271,6 +393,7 @@ function renderHabits() {
                         ${isCompleted ? '✓' : '○'}
                     </div>
                 </div>
+                ${renderHabitInsights(habit)}
                 <div class="habit-grid" style="color: ${habit.color}">
                     ${generateHabitGrid(habit)}
                 </div>
@@ -305,6 +428,7 @@ function showHabitDetails(habitId) {
             </div>
             <div class="modal-body">
                 <p style="color: #999; margin-bottom: 1rem;">${habit.description}</p>
+                ${renderHabitInsights(habit)}
                 <div class="habit-grid" style="color: ${habit.color}; margin-bottom: 1.5rem;">
                     ${generateHabitGrid(habit)}
                 </div>

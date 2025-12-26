@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# OS / editor
+.DS_Store
+
+# Vercel
+.vercel/
+
+# Android build artifacts (Capacitor/Android Studio project)
+android/
+
+# Local-only workspace artifacts
+webapp:/
+
